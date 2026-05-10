@@ -24,3 +24,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "MyAndroidProject"
 include(":app")
+include(":a2dg")
