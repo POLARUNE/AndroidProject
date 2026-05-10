@@ -1,12 +1,12 @@
-package com.example.myandroidproject
+package com.example.myandroidproject.app
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import com.example.myandroidproject.BuildConfig
 import com.example.myandroidproject.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -18,12 +18,12 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
-//        // 디버그 빌드일 때에는 1초 후 게임 화면으로 바로 넘어가게 한다
-//        if (BuildConfig.DEBUG) {
-//            Handler(Looper.getMainLooper()).postDelayed({
-//                startGameActivity()
-//            }, 1000)
-//        }
+        // 디버그 빌드일 때에는 1초 후 게임 화면으로 바로 넘어가게 한다
+        if (BuildConfig.DEBUG) {
+            Handler(Looper.getMainLooper()).postDelayed({
+                startGameActivity()
+            }, 1000)
+        }
     }
 
     fun onBtnStartGame(view: View) {
