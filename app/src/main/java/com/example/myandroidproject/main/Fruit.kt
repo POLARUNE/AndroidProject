@@ -21,6 +21,7 @@ class Fruit(gctx: GameContext, val index: Int) : Sprite(gctx, R.drawable.fruits)
     companion object {
         const val COLS = 5 // 열 개수
         const val ROWS = 3 // 행 개수
+        const val MAX_INDEX = 15 // 과일 개수
     }
 
     init {
@@ -54,10 +55,9 @@ class Fruit(gctx: GameContext, val index: Int) : Sprite(gctx, R.drawable.fruits)
         // 2. 속도 반전 및 감쇠: 위쪽 방향(-)으로 속도를 바꿈
         vy = -vy * bounceFactor
 
-        // 3. 정지 조건: 튕기는 속도가 아주 작아지면 아예 멈추고 떨어지는 상태 해제
+        // 3. 정지 조건: 튕기는 속도가 아주 작아지면 아예 멈춤
         if (Math.abs(vy) < 2.0f) {
             vy = 0f
-            isFalling = false
         }
     }
 
@@ -81,4 +81,6 @@ class Fruit(gctx: GameContext, val index: Int) : Sprite(gctx, R.drawable.fruits)
         // 좌표 변경 후 dstRect 갱신
         syncDstRect()
     }
+
+
 }

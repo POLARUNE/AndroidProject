@@ -42,7 +42,7 @@ class MainScene(gctx: GameContext) : Scene(gctx) {
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
         val action = event.action
-        val tx = event.x
+        val tx = event.x - 50f
 
         when (action) {
             MotionEvent.ACTION_DOWN, MotionEvent.ACTION_MOVE -> {
