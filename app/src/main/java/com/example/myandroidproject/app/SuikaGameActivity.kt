@@ -11,6 +11,7 @@ class SuikaGameActivity : BaseGameActivity() {
     override val drawsDebugInfo: Boolean = BuildConfig.DEBUG
     override val drawsFpsGraph: Boolean = BuildConfig.DEBUG
     override fun createRootScene(gctx: GameContext): Scene {
+        gctx.metrics.setSize(900f, 1600f)
         return MainScene(gctx)
     }
 }
