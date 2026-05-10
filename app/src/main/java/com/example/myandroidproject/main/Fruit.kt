@@ -16,6 +16,7 @@ class Fruit(gctx: GameContext, val index: Int) : Sprite(gctx, R.drawable.fruits)
     var vy = 0f
     val gravity = 1.0f
     var isFalling = false
+    private val bounceFactor = 0.5f
 
     companion object {
         const val COLS = 5 // 열 개수
@@ -41,9 +42,23 @@ class Fruit(gctx: GameContext, val index: Int) : Sprite(gctx, R.drawable.fruits)
         setSize(100f, 100f)
     }
 
-    // 과일이 떨어지는 로직을 위해 x, y 좌표를 외부에서 쉽게 설정할 수 있도록 public으로 열어둡니다.
     fun setPosition(targetX: Float, targetY: Float) {
         setCenter(targetX, targetY)
+    }
+
+    fun bounceBack(surfaceTop: Float) {
+        // 1. 위치 보정: 벽 안으로 파고들지 않게 표면 위로 딱 붙임
+        y = surfaceTop - (height / 2f)
+        syncDstRect()
+
+        // 2. 속도 반전 및 감쇠: 위쪽 방향(-)으로 속도를 바꿈
+        vy = -vy * bounceFactor
+
+        // 3. 정지 조건: 튕기는 속도가 아주 작아지면 아예 멈추고 떨어지는 상태 해제
+        if (Math.abs(vy) < 2.0f) {
+            vy = 0f
+            isFalling = false
+        }
     }
 
     override fun update(gctx: GameContext) {
@@ -51,6 +66,17 @@ class Fruit(gctx: GameContext, val index: Int) : Sprite(gctx, R.drawable.fruits)
 
         vy += gravity
         y += vy
+
+        // 2. 좌우 벽 제한 (X축 범위 제한)
+        val halfWidth = width / 2f
+        val minX = 100f + halfWidth
+        val maxX = 800f - halfWidth
+
+        if (x < minX) {
+            x = minX
+        } else if (x > maxX) {
+            x = maxX
+        }
 
         // 좌표 변경 후 dstRect 갱신
         syncDstRect()
