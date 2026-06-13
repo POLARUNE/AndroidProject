@@ -73,8 +73,8 @@ class GameOverScene(
         canvas.drawText("시작 화면", btnRestartRect.centerX(), btnRestartRect.centerY() + 12f, btnTextPaint)
 
         // [E] 랭킹보기 버튼 그리기
-        canvas.drawRoundRect(btnRankingRect, 20f, 20f, btnRankPaint)
-        canvas.drawText("랭킹 보기", btnRankingRect.centerX(), btnRankingRect.centerY() + 12f, btnTextPaint)
+        //canvas.drawRoundRect(btnRankingRect, 20f, 20f, btnRankPaint)
+        //canvas.drawText("랭킹 보기", btnRankingRect.centerX(), btnRankingRect.centerY() + 12f, btnTextPaint)
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
