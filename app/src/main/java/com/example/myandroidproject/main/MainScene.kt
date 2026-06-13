@@ -11,8 +11,9 @@ class MainScene(gctx: GameContext) : Scene(gctx) {
 
     // 현재 조작 중인(대기 중인) 과일
     private var currentFruit: Fruit? = null
+    private val score = Score(gctx)
     enum class Layer {
-        BG, FLOOR, FRUIT, CONTROLLER
+        BG, FLOOR, FRUIT, CONTROLLER, UI
     }
 
     override val clipsRect = true
@@ -21,7 +22,10 @@ class MainScene(gctx: GameContext) : Scene(gctx) {
 
         add(Floor(gctx, 450f, 1405f, 700f, 10f), Layer.FLOOR)
 
-        add(CollisionChecker(this), Layer.CONTROLLER)
+        //자기 자신(this)을 주입하여 CollisionChecker가 MainScene의 함수들을 부를 수 있게 함
+        add(CollisionChecker(this@MainScene, this), Layer.CONTROLLER)
+
+        add(score, Layer.UI)
     }
 
     init {
@@ -68,6 +72,15 @@ class MainScene(gctx: GameContext) : Scene(gctx) {
             }
         }
         return true
+    }
+
+
+    fun addScore(amount: Int) {
+        score.value += amount
+    }
+
+    fun getScore(): Int {
+        return score.value
     }
 }
 

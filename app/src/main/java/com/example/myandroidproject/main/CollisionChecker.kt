@@ -10,6 +10,7 @@ import kotlin.math.abs
 import kotlin.math.sqrt
 
 class CollisionChecker(
+    private val scene: MainScene,
     private val world: World<MainScene.Layer>
 ) : IGameObject {
 
@@ -56,6 +57,12 @@ class CollisionChecker(
                                 val midX = (fruit.x + other.x) / 2
                                 val midY = (fruit.y + other.y) / 2
                                 toSpawn = Triple(midX, midY, fruit.index + 1)
+
+                                // [점수 반영] 합성 성공 시 MainScene의 점수 추가 함수 호출
+                                val n = fruit.index + 1 // 1번째 과일은 n=1, 2번째는 n=2 ...
+                                val points = n * n * 100
+                                scene.addScore(points) // 점수 반영
+
                                 break
                             }
                         }
