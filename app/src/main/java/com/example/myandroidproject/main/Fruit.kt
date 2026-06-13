@@ -28,8 +28,8 @@ class Fruit(gctx: GameContext, val index: Int) : Sprite(gctx, R.drawable.fruits)
 
     companion object {
         const val COLS = 5 // 열 개수
-        const val ROWS = 3 // 행 개수
-        const val MAX_INDEX = 15 // 과일 개수
+        const val ROWS = 2 // 행 개수
+        const val MAX_INDEX = 10 // 과일 개수
     }
 
     init {
@@ -61,6 +61,19 @@ class Fruit(gctx: GameContext, val index: Int) : Sprite(gctx, R.drawable.fruits)
 
     // draw 함수 재정의
     override fun draw(canvas: Canvas) {
+        val visualScale = 1.4f
+
+        val halfW = (width / 2f) * visualScale
+        val halfH = (height / 2f) * visualScale
+
+        // 중앙 좌표(x, y) 기준으로 비주얼 스케일이 적용된 새로운 출력 영역 계산
+        dstRect.set(
+            x - halfW,
+            y - halfH,
+            x + halfW,
+            y + halfH
+        )
+
         // 부모(Sprite)의 draw를 호출하여 실제 과일 이미지를 먼저 그립니다.
         super.draw(canvas)
 
