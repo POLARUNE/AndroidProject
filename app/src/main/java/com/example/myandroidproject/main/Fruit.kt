@@ -1,22 +1,30 @@
 package com.example.myandroidproject.main
 
 
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.RectF
 import com.example.myandroidproject.R
 import kr.ac.tukorea.ge.spgp2026.a2dg.objects.IBoxCollidable
+import kr.ac.tukorea.ge.spgp2026.a2dg.objects.ICircleCollidable
 import kr.ac.tukorea.ge.spgp2026.a2dg.objects.Sprite
 import kr.ac.tukorea.ge.spgp2026.a2dg.view.GameContext
+import kr.ac.tukorea.ge.spgp2026.a2dg.view.GameView
 
-class Fruit(gctx: GameContext, val index: Int) : Sprite(gctx, R.drawable.fruits), IBoxCollidable {
+class Fruit(gctx: GameContext, val index: Int) : Sprite(gctx, R.drawable.fruits),
+    ICircleCollidable {
 
-    // IBoxCollidable 구현: Sprite의 dstRect를 충돌 영역으로 사용
-    override val collisionRect: RectF get() = dstRect
+    // ICircleCollidable 구현
+    override val centerX: Float get() = x
+    override val centerY: Float get() = y
+    override val radius: Float get() = width / 2f // 과일 너비의 절반을 반지름으로 사용
 
     var vy = 0f
     val gravity = 1.0f
     var isFalling = false
-    private val bounceFactor = 0.5f
+    private val bounceFactor = 0.3f
 
     companion object {
         const val COLS = 5 // 열 개수
@@ -38,9 +46,33 @@ class Fruit(gctx: GameContext, val index: Int) : Sprite(gctx, R.drawable.fruits)
         val top = row * frameHeight
         srcRect = Rect(left, top, left + frameWidth, top + frameHeight)
 
-        // 4. 화면에 그릴 기본 크기 설정 (예: 100x100)
-        // 나중에 과일 종류(index)에 따라 크기를 다르게 설정할 수 있습니다.
-        setSize(100f, 100f)
+        // 4. 화면에 그릴 기본 크기 설정
+        // 0번 과일은 반지름 40(크기 80), 갈수록 커짐
+        val calculatedSize = 80f + (index * 15f)
+        setSize(calculatedSize, calculatedSize)
+    }
+
+    // 디버그용 Paint 객체를 동적 생성을 피하기 위해 클래스 멤버로 선언
+    private val debugPaint = Paint().apply {
+        color = Color.RED
+        style = Paint.Style.STROKE
+        strokeWidth = 3f
+    }
+
+    // draw 함수 재정의
+    override fun draw(canvas: Canvas) {
+        // 부모(Sprite)의 draw를 호출하여 실제 과일 이미지를 먼저 그립니다.
+        super.draw(canvas)
+
+        // 프레임워크의 디버그 정보 표시 플래그가 true일 때만 빨간 원을 얹어서 그립니다.
+        if (GameView.drawsDebugInfo) {
+            canvas.drawCircle(
+                centerX, // x와 동일
+                centerY, // y와 동일
+                radius,  // width / 2f와 동일
+                debugPaint
+            )
+        }
     }
 
     fun setPosition(targetX: Float, targetY: Float) {
@@ -48,32 +80,30 @@ class Fruit(gctx: GameContext, val index: Int) : Sprite(gctx, R.drawable.fruits)
     }
 
     fun bounceBack(surfaceTop: Float) {
-        // 1. 위치 보정: 벽 안으로 파고들지 않게 표면 위로 딱 붙임
-        y = surfaceTop - (height / 2f)
+        y = surfaceTop - radius // height / 2f 대신 radius 사용
         syncDstRect()
 
-        // 2. 속도 반전 및 감쇠: 위쪽 방향(-)으로 속도를 바꿈
         vy = -vy * bounceFactor
-
-        // 3. 정지 조건: 튕기는 속도가 아주 작아지면 아예 멈춤
         if (Math.abs(vy) < 2.0f) {
             vy = 0f
         }
     }
 
     override fun update(gctx: GameContext) {
-        if (!isFalling) return
+        // 중력과 Y축 이동은 낙하 중일 때만 처리
+        if (isFalling) {
+            vy += gravity
+            y += vy
+        }
 
-        vy += gravity
-        y += vy
-
-        // 2. 좌우 벽 제한 (X축 범위 제한)
-        val halfWidth = width / 2f
-        val minX = 100f + halfWidth
-        val maxX = 800f - halfWidth
+        // 벽 제한은 낙하 중(isFalling)이 아니더라도 '항상' 감시합니다.
+        // 바닥에 누워있을 때 위에서 밀어도 절대 벽을 못 넘어가게 만듭니다.
+        val minX = 100f + radius
+        val maxX = 800f - radius
 
         if (x < minX) {
             x = minX
+            // 벽에 부딪혔을 때 속도가 남아있다면 지워줍니다.
         } else if (x > maxX) {
             x = maxX
         }

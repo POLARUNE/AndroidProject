@@ -26,7 +26,7 @@
         android:layout_height="60dp"
         android:text="게임 시작"
         android:textSize="20sp"
-        android:backgroundTint="#FFEB3B"
+        android:backgroundTint="#AAEB3B"
         android:textColor="#000000"
         android:onClick="onBtnStartGame"
         app:layout_constraintBottom_toTopOf="@+id/btnExit"
@@ -35,7 +35,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
-        android:layout_marginBottom="20dp"/>
+        app:layout_constraintVertical_bias="0.9"
+        android:layout_marginBottom="20dp" />
 
     <!-- 게임 종료 버튼 -->
     <Button
@@ -44,12 +45,12 @@
         android:layout_height="60dp"
         android:text="게임 종료"
         android:textSize="20sp"
-        android:backgroundTint="#F44336"
+        android:backgroundTint="#AA4336"
         android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnStart" />
+        app:layout_constraintTop_toBottomOf="@+id/btnStart" />a
 
 </androidx.constraintlayout.widget.ConstraintLayout>
