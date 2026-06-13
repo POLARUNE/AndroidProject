@@ -40,6 +40,7 @@ class MainScene(gctx: GameContext) : Scene(gctx) {
     }
 
     init {
+        gctx.res.loadSound(com.example.myandroidproject.R.raw.pop)
         spawnNextFruit()
     }
 
@@ -136,6 +137,15 @@ class MainScene(gctx: GameContext) : Scene(gctx) {
         )
     }
 
+    override fun onEnter() {
+        super.onEnter()
+        gctx.res.playBgm(com.example.myandroidproject.R.raw.bgm)
+    }
+
+    override fun onExit() {
+        super.onExit()
+        gctx.res.stopBgm()
+    }
 
     fun addScore(amount: Int) {
         score.value += amount

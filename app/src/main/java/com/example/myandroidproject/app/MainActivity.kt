@@ -25,7 +25,6 @@ class MainActivity : AppCompatActivity() {
             }, 1000)
         }
     }
-
     fun onBtnStartGame(view: View) {
         startGameActivity()
     }

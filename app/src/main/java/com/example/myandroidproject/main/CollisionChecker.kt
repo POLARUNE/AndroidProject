@@ -51,21 +51,26 @@ class CollisionChecker(
 
                         // [1] 같은 종류의 과일이면 합성 (첫 번째 반복에서만 처리)
                         if (fruit.index == other.index) {
-                            if (fruit.index < Fruit.MAX_INDEX) {
+                            if (fruit.index == Fruit.MAX_INDEX - 1) {
+                                world.remove(fruit, MainScene.Layer.FRUIT)
+                                world.remove(other, MainScene.Layer.FRUIT)
+                            } else {
                                 toRemove.add(fruit)
                                 toRemove.add(other)
                                 val midX = (fruit.x + other.x) / 2
                                 val midY = (fruit.y + other.y) / 2
                                 toSpawn = Triple(midX, midY, fruit.index + 1)
-
-                                // [점수 반영] 합성 성공 시 MainScene의 점수 추가 함수 호출
-                                val n = fruit.index + 1 // 1번째 과일은 n=1, 2번째는 n=2 ...
-                                val points = n * n * 100
-                                scene.addScore(points) // 점수 반영
-
-                                break
                             }
+                            // [점수 반영] 합성 성공 시 MainScene의 점수 추가 함수 호출
+                            val n = fruit.index + 1 // 1번째 과일은 n=1, 2번째는 n=2 ...
+                            val points = n * n * 100
+                            scene.addScore(points) // 점수 반영
+
+                            gctx.res.playSound(com.example.myandroidproject.R.raw.pop)
+
+                            break
                         }
+
                         // [2] 다른 종류의 과일이면 밀어내기
                         else {
                             val overlap = minDistance - distance
@@ -75,8 +80,6 @@ class CollisionChecker(
                             val top = if (fruit.y < other.y) fruit else other
                             val bottom = if (fruit.y < other.y) other else fruit
 
-                            // ⭐️ 핵심 수정: 서로 부딪혀서 밀려나는 순간, 두 과일 모두 물리(낙하) 상태를 강제로 깨웁니다!
-                            // 이렇게 해야 바닥에 고정되어 있던 과일도 옆에서 밀 때 스르륵 밀려납니다.
                             fruit.isFalling = true
                             other.isFalling = true
 
