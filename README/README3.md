@@ -36,6 +36,7 @@
 
 8주차: 디버깅 및 테스트
 
+<img width="878" height="507" alt="image" src="https://github.com/user-attachments/assets/00a60ef3-9f92-4051-9b05-728358f5ff89" />
 
 
 
